@@ -60,10 +60,37 @@ public class Aluno implements Cloneable{
 	{
 		if(email == null || email.equals(""))
 			throw new Exception("Email Invalido!");
-		
+		if(!temArroba(email))
+			throw new Exception("Email Invalido pois não tem @ !");
+		if(!temCom(email))
+			throw new Exception("Email Invalido pois não tem .com");
 		this.email = email;
 	}
 	
+	private boolean temArroba(String email) {
+		boolean retorno = false;
+		for(int i=0; i < email.length();i++) {
+			if(email.charAt(i) == '@')
+				retorno = true;
+		}
+		return retorno;
+	}
+	public boolean temCom(String email)
+	{
+		String pCom = ".com";
+		String com = "";
+		boolean retorno = false;
+		int comeco = email.length() -4;
+		for(int i = comeco; i < comeco;i++ )
+		{
+			
+			com += email.charAt(i)+"";
+		}
+		if(pCom.equals(com))
+			retorno = true;
+		
+		return retorno;
+	}
 	public String toString()
 	{
 		return "RA: "+ this.getRa() + 

@@ -9,6 +9,6 @@ public class Programa {
         //System.out.println(Alunos.showAlunos());//
         //Materias.incluir(new Materia(2,"Desenvolvimento para Internet 2"));
         //Fezs.incluir(new Fez(19372,2,9.0f,65));
-        System.out.println(Alunos.alunosAcimaDe(5));
+        System.out.println(Alunos.showAlunos());
     }
 }

@@ -18,7 +18,7 @@ frequencia int not null
 constraint fkRA foreign key(RA) references ALUNOS(RA),
 constraint fkcodMaterias foreign key(codigoMaterias) references MATERIAS(codigoMaterias))
 
-
+select * from ALUNOS
 
 -- RELATORIO
 
