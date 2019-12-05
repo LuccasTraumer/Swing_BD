@@ -1,12 +1,10 @@
 /*
 ARQUIVOS COM OS COMANDOS NECESSARIOS DO PROF. SERGIO DO TRABALHO.
 
-
 */
 
-
-
--- Stored PROCEDURES 
+---------------------------------- STORED PROCEDURE
+-- 1Stored PROCEDURES 
 create procedure exclusaoAluno_sp -- SENDO UTILIZADO CLASSE ALUNODAO
 @ra int = null
 as 
@@ -17,11 +15,9 @@ begin
 	delete from ALUNOS where RA = @ra
 
 end
-select * from ALUNOS
-drop proc exclusaoAluno_sp
+select * from fez
 
-
--- Stored PROCEDURES
+-- 2Stored PROCEDURES
 
 create proc exlusaoMateria_sp -- SENDO UTILIZADO CLASSE MATERIADAO
 @nome varchar(100) = null
@@ -47,6 +43,44 @@ group by a.nome
 order by avg(f.frequencia) desc
 
 drop proc ordemCrescenteFreq_sp
+
+--4 STORED PROCEDURE
+create proc frequenciaAlunos_sp
+as
+select a.nome,avg(f.frequencia) as 'Frequencia'from 
+ALUNOS a, FEZ f
+where
+a.RA = f.RA
+GROUP BY a.NOME
+order by avg(f.frequencia) asc
+--nome das materias sem reprovacao materias MATERIAS
+alter proc materiasSemReprovacao_sp
+as
+select m.nome, avg(f.NOTA) as 'Media'from MATERIAS m 
+inner join FEZ f on m.codigoMaterias = f.codigoMaterias
+where 
+f.NOTA > 5
+group by m.NOME
+order by avg(f.NOTA) asc
+select * from MATERIAS
+
+--5 STORED PROCEDURE
+create proc mediaCrescenteAlunos_sp
+as
+select m.nome, avg(f.nota)as 'MediaAlunos' from MATERIAS m
+inner join FEZ f on m.codigoMaterias = f.codigoMaterias
+group by m.NOME
+order by m.NOME asc
+
+--6 STORED PROCEDURE
+alter proc mediaAlunosPorMateria_sp
+as
+select a.nome as 'NomeAluno',m.nome as 'NomeMateria',avg(f.NOTA)as 'Media' from ALUNOS a
+inner join FEZ f on a.RA = f.RA 
+inner join MATERIAS m on m.codigoMaterias = f.codigoMaterias
+group by a.NOME,m.NOME
+order by avg(f.NOTA) asc
+-------------------------------------TRIGGER
 -- 1 criando trigger ** CASO INSIRA ALGUM ALUNO A TRIGGER É DISPARADA == FEITO
 
 create trigger inseriuAluno_tg on ALUNOS -- SENDO ULTILIZADO 
@@ -57,14 +91,42 @@ print'Aluno INSERIDO'
 create trigger deletarAluno_tg on ALUNOS -- SENDO ULTILIZADO 
 for DELETE
 as
+
 print 'ALUNO DELETADO'
 
+
+--------- 3 TRIGGER
+create trigger exclMat_tg on MATERIAS
+instead of delete as 
+delete from FEZ where codigomaterias = (select codigoMaterias from deleted)
+delete from MATERIAS where codigoMaterias = (select codigoMaterias from deleted)
+
+-------- 4 TRIGGER
+create trigger exclAluno_tg on ALUNOS
+instead of delete as 
+delete from Fez where ra = (select ra from deleted)
+delete from Alunos where ra = (select ra from deleted)
+
+
+-- 5 Trigger
+
+create trigger alterdoAluno_tg on ALUNOS
+for UPDATE as
+print 'Dados Alterados'
+
+-- 6 trigger
+create trigger alterarMateria_tg on MATERIAS
+for UPDATE
+as
+print 'Materia Alterada'
+
+----------------------------- CURSORES
 -- 1 Cursor ** ALUNOS COM MENOR FREQUENCIA ATÉ MAIOR 
 create proc freqCrescente_sp
 as
 
 
-select * from FEZ order by frequencia desc
+select * from FEZ order by frequencia asc
 
 -- 2 Cursor ** ALUNOS ACIMA DE UMA NOTA
 create proc notaAcima_sp  -- NÃO CONSEGUI IMPLEMENTAR POIS NÃO SEI MANUSEAR CURSOR AINDA
@@ -92,15 +154,36 @@ else
 	deallocate notaAci
 end
 
-notaAcima_sp 5
+notaAcima_sp 4
 
-select * from FEZ
+-- 3 cursor
+
+
+-- 4 cursor
+
+--------------------------------- TAB TEMP
 -- 1 Tabela Temporaria ** Armazenas os Dados Anteriores
+select a.ra as 'RA', a.NOME as 'NomeAluno',a.EMAIL as 'Email' 
+into #AlunosAtual
+from ALUNOS a
 
+insert into ALUNOS values(19771,'Thiago Almeida','thi@gmail.com')
 
+select * from #AlunosAtual
 -- 2 Tabela Temporaria ** 
 
+select m.codigoMaterias as 'codigoMateria', m.nome as 'nomeMateria'
+into #materiasAtual
+from MATERIAS m
+-- 3 Tabela Temporaria ** 
 
+select f.ra as 'RA', f.codigoMaterias as 'CodigoMaterias', f.NOTA as 'NOTA', f.frequencia 
+into #FezAtual
+from FEZ f
+
+-- 4 Tabela Temporaria ** 
+
+---------------------------------------- GROUP BY
 -- 1 Group by ** REUNIR MEDIA DE CADA ALUNO
 
 select a.nome,AVG(f.NOTA) as 'Media' from ALUNOS a,FEZ f 
@@ -122,6 +205,7 @@ a.RA = f.RA
 group by a.NOME,m.NOME
 
 
+------------------------------------- VIEWS
 --1 view ** VISUALIZA TODAS AS MATERIAS == FEITO
 create view Materias_vw -- UTILIZADA NA CLASSE MATERIA
 as 
@@ -134,18 +218,44 @@ create view Alunos_vw -- UTILIZADA NA CLASSE ALUNO
 as 
 select * from ALUNOS
 
-select * from FEZ
+select * from Alunos_vw
 
+--- 3 Views
+create view alunosAcimaMedia
+as
+select a.NOME from FEZ f 
+inner join ALUNOS a on a.RA = f.RA
+where 
+f.NOTA > 5
 
+--- 4 views
+
+select a.nome from ALUNOS a
+inner join FEZ f on a.ra = f.RA
+where 
+avg(f.frequencia) < 50
+group by a.NOME
+--------------------------------------- DEFAULT
 --1 defalut
-
-
+alter table FEZ	
+add constraint df_frequencia
+default 0 for frequencia
 
 --2 defalut
+alter table FEZ 
+add constraint df_NOTA
+default 0 for NOTA
 
 
+select * from FEZ
+-- 3 default
 
--- 1 rules ** REGRA DO EMAIL DO ALUNO
+-- 4 default 
+-------------------------------------------RULES
+-- 1 rules 
+create rule validaRA_rule 
+as
+@codigo > 9999
 
 
 -- 2 rules ** FREQUENCIA DOS ALUNOS
@@ -159,6 +269,10 @@ create rule codigoValido_rule
 as
 @codigo > 0
 
+
+
+
+SP_BINDRULE validaRA_rule,'ALUNOS.RA'
 SP_BINDRULE codigoValido_rule,'ALUNOS.RA'
 SP_BINDRULE codigoValido_rule,'MATERIAS.codigoMaterias'
 
@@ -168,3 +282,5 @@ as
 @nota >= 0 and @nota <= 10
 
 SP_BINDRULE notaValida_rule,'FEZ.NOTA'
+
+-- 5 rules
