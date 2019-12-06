@@ -84,7 +84,7 @@ public class JanelaPrincipal {
 	private void initialize() {
 		frmPrincipal = new JFrame();
 		frmPrincipal.setTitle("Principal");
-		frmPrincipal.setBounds(100, 100, 962, 441);
+		frmPrincipal.setBounds(100, 100, 1089, 386);
 		frmPrincipal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmPrincipal.getContentPane().setLayout(new BoxLayout(frmPrincipal.getContentPane(), BoxLayout.X_AXIS));
 		
@@ -499,6 +499,28 @@ public class JanelaPrincipal {
 		panel_4.add(btnIncluir_F);
 		
 		JButton btnAlterar_F = new JButton("Alterar");
+		btnAlterar_F.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					int linhaSelc = table_F.getSelectedRow();
+					
+					if(linhaSelc != -1) {
+						int ra = Integer.parseInt((String)table_F.getModel().getValueAt(linhaSelc, 0));
+						int codMat = Integer.parseInt((String)table_F.getModel().getValueAt(linhaSelc, 1));
+						float nota = Float.parseFloat((String)table_F.getModel().getValueAt(linhaSelc, 2));
+						int freq = Integer.parseInt((String)table_F.getModel().getValueAt(linhaSelc, 3));
+						
+						EditarFez edit = new EditarFez(ra,codMat,nota,freq);
+						edit.frmAltFez.setVisible(true);
+						btnLeitura_F.doClick();
+					}else {
+						Object[] options = {"Confirmar"};
+						JOptionPane.showOptionDialog(null,"É necessario seleconar uma Materia para Excluir","Selecionar Materia",  JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR,null, options, options[0]);
+					}
+					
+				}catch(Exception err) {}
+			}
+		});
 		panel_4.add(btnAlterar_F);
 		
 		JButton btnExcluir_F = new JButton("Excluir");
@@ -515,10 +537,11 @@ public class JanelaPrincipal {
 						}
 					}else {
 						Object[] options = {"Confirmar"};
-						JOptionPane.showOptionDialog(null,"É necessario seleconar um Aluno para Excluir","Selecionar Aluno",  JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR,null, options, options[0]);
+						JOptionPane.showOptionDialog(null,"É necessario seleconar um Registro para Excluir","Selecione registro",  JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR,null, options, options[0]);
 					}
 					
 				}catch(Exception erro) {}
+				
 			}
 		});
 		panel_4.add(btnExcluir_F);

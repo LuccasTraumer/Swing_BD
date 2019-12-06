@@ -20,7 +20,7 @@ constraint fkcodMaterias foreign key(codigoMaterias) references MATERIAS(codigoM
 
 select * from FEZ
 
-update FEZ SET frequencia = 80, nota = 7.5 where RA = 1 and codigoMaterias = 2
+update FEZ SET frequencia = 80, nota = 7.5 where RA = 19372 and codigoMaterias = 2
 insert into FEZ values(19372,2,8.0,75)
 -- RELATORIO
 
