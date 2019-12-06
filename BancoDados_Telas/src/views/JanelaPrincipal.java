@@ -84,7 +84,7 @@ public class JanelaPrincipal {
 	private void initialize() {
 		frmPrincipal = new JFrame();
 		frmPrincipal.setTitle("Principal");
-		frmPrincipal.setBounds(100, 100, 917, 444);
+		frmPrincipal.setBounds(100, 100, 962, 441);
 		frmPrincipal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmPrincipal.getContentPane().setLayout(new BoxLayout(frmPrincipal.getContentPane(), BoxLayout.X_AXIS));
 		
@@ -103,9 +103,11 @@ public class JanelaPrincipal {
 		table = new JTable();
 		painelTabela.add(table);
 		
-		JScrollPane scroll = new JScrollPane(table);
-		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		painelTabela.add(scroll);
+		JScrollPane scrollAluno = new JScrollPane(table);
+		scrollAluno.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		painelTabela.add(scrollAluno);
+		
+		
 		JPanel panel = new JPanel();
 		panelAlunos.add(panel);
 		panel.setLayout(new GridLayout(0, 1, 0, 0));
@@ -251,6 +253,10 @@ public class JanelaPrincipal {
 		table_M = new JTable();
 		panel_3.add(table_M);
 		
+		JScrollPane scrollMateria = new JScrollPane(table_M);
+		panel_3.add(scrollMateria);
+		scrollMateria.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		
 		JPanel panel_2 = new JPanel();
 		Exibir.add(panel_2);
 		panel_2.setLayout(new GridLayout(0, 1, 0, 0));
@@ -381,6 +387,10 @@ public class JanelaPrincipal {
 		table_F = new JTable();
 		panel_1.add(table_F);
 		
+		JScrollPane scrollFez = new JScrollPane(table_F);
+		panel_1.add(scrollFez);
+		scrollFez.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		
 		JPanel panel_4 = new JPanel();
 		panelFez.add(panel_4);
 		panel_4.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -416,16 +426,101 @@ public class JanelaPrincipal {
 		txtNota_F.setColumns(10);
 		panel_4.add(txtNota_F);
 		
-		JButton button = new JButton("Incluir");
-		panel_4.add(button);
+		JButton btnLeitura_F = new JButton("Leitura");
+		btnLeitura_F.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					MeuResultSet resultado;
+					String[] colunas = {"RA","Cod Materia","NOTA","FREQUENCIA"};
+					resultado = Fezs.mostraFez();
+					DefaultTableModel tabela = new DefaultTableModel(colunas,0);
+					
+					while(resultado.next()) {
+						tabela.addRow(new String[] {""+ resultado.getInt(1),  ""+resultado.getInt(2), ""+resultado.getFloat(3), ""+resultado.getInt(4)});
+					}
+					table_F.setModel(tabela);
+					}catch(Exception err) {
+						err.printStackTrace();
+					}
+			}
+		});
+
+		panel_4.add(btnLeitura_F);
 		
-		JButton button_1 = new JButton("Excluir");
-		panel_4.add(button_1);
+		JButton btnIncluir_F = new JButton("Incluir");
+		btnIncluir_F.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int ra = 0;
+				int codM = 0;
+				float nota = 0.0f;
+				int freq = 0;
+				if(txtRa_F.getText().length() < 5) {
+					Object[] options = {"Confirmar"};
+					JOptionPane.showOptionDialog(null,"Ra invalido","RA",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE,null, options, options[0]);
+				}else {
+					ra = Integer.parseInt(txtRa_F.getText());
+				}
+				if(txtCodMat_F.getText().length() < 1)
+				{
+					Object[] options = {"Confirmar"};
+					JOptionPane.showOptionDialog(null,"Codigo invalido","Cod Mat",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE,null, options, options[0]);
+				}else {
+					codM = Integer.parseInt(txtCodMat_F.getText());
+				}
+				if(txtNota_F.getText().length() < 1)
+				{
+					Object[] options = {"Confirmar"};
+					JOptionPane.showOptionDialog(null,"Nota invalida","Nota",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE,null, options, options[0]);
+				}else {
+					nota = Float.parseFloat(txtNota_F.getText());
+				}
+				if(txtFrequencia_F.getText().length() < 1)
+				{
+					Object[] options = {"Confirmar"};
+					JOptionPane.showOptionDialog(null,"Frequencia invalida","Frequencia",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE,null, options, options[0]);
+				}
+				else {
+					freq = Integer.parseInt(txtFrequencia_F.getText());
+					try {
+					modeloFez = new Fez(ra,codM,nota,freq);
+					Fezs.incluir(modeloFez);
+					btnLeitura_F.doClick();
+					Object[] options = {"Confirmar"};
+					JOptionPane.showOptionDialog(null,"Aluno Incluido","Sucesso",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE,null, options, options[0]);
+					}
+					catch(Exception err) {
+						Object[] options = {"Confirmar"};
+						JOptionPane.showOptionDialog(null,err.getMessage(),"Exception",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE,null, options, options[0]);err.getMessage();
+					}
+					
+				}
+			}
+		});
+		panel_4.add(btnIncluir_F);
 		
-		JButton button_2 = new JButton("Alterar");
-		panel_4.add(button_2);
+		JButton btnAlterar_F = new JButton("Alterar");
+		panel_4.add(btnAlterar_F);
 		
-		JButton button_3 = new JButton("Leitura");
-		panel_4.add(button_3);
+		JButton btnExcluir_F = new JButton("Excluir");
+		btnExcluir_F.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					int linhaSelc = table_F.getSelectedRow();
+					if(linhaSelc != -1) {
+						int resp = JOptionPane.showConfirmDialog(null,"Deseja Realmente excluir ?","Exluir?",JOptionPane.YES_NO_OPTION);
+						if(resp == JOptionPane.YES_NO_OPTION) {
+							int ra = Integer.parseInt((String)table_F.getModel().getValueAt(linhaSelc,0));
+							Fezs.excluir(ra);
+							btnLeitura_F.doClick();
+						}
+					}else {
+						Object[] options = {"Confirmar"};
+						JOptionPane.showOptionDialog(null,"É necessario seleconar um Aluno para Excluir","Selecionar Aluno",  JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR,null, options, options[0]);
+					}
+					
+				}catch(Exception erro) {}
+			}
+		});
+		panel_4.add(btnExcluir_F);
 	}
 }

@@ -18,8 +18,10 @@ frequencia int not null
 constraint fkRA foreign key(RA) references ALUNOS(RA),
 constraint fkcodMaterias foreign key(codigoMaterias) references MATERIAS(codigoMaterias))
 
-select * from ALUNOS
+select * from FEZ
 
+update FEZ SET frequencia = 80, nota = 7.5 where RA = 1 and codigoMaterias = 2
+insert into FEZ values(19372,2,8.0,75)
 -- RELATORIO
 
 --alunos que tiveram 0% de frequencia ALUNOS

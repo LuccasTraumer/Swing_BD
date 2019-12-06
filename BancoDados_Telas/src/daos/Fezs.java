@@ -24,6 +24,19 @@ public final class Fezs {
 		}
 		return retorno;
 	}
+	public static MeuResultSet mostraFez() throws Exception
+	{
+		MeuResultSet resultado;
+		try {
+			
+			String sql = "SELECT * FROM FEZ";
+			BDSQLServer.COMANDO.prepareStatement(sql);
+			resultado = (MeuResultSet) BDSQLServer.COMANDO.executeQuery();
+		}catch(SQLException err) {
+			throw new Exception("Erro ao Visualizar!");
+		}
+		return resultado;
+	}
 	public static void incluir(Fez novo) throws Exception
 	{
 		if(novo == null)
@@ -52,6 +65,7 @@ public final class Fezs {
             
 		if(!existe(ra))
 			throw new Exception("RA invalido para Exclus�o!");
+		
 		try {
 			String sql;
 			sql = "DELETE FROM FEZ WHERE RA = ?";
@@ -65,17 +79,37 @@ public final class Fezs {
 			throw new Exception("Erro ao Excluir Dado!");
 		}
 	}
-	
+	public static boolean existeMat(int cod) throws Exception{
+		boolean resultado = false;
+		if(cod < 0)
+			throw new Exception("Codigo Invalido!");
+		try {
+			String sql = "select * from FEZ where codigoMaterias = ?";
+			BDSQLServer.COMANDO.prepareStatement(sql);
+			BDSQLServer.COMANDO.setInt(1,cod);
+			MeuResultSet resp = (MeuResultSet) BDSQLServer.COMANDO.executeQuery();
+			resultado = resp.first();
+		}catch(SQLException err) {
+			throw new Exception("Erro ao Visualizar!");
+		}
+		return resultado;
+	}
 	public static void atualizar(Fez alt) throws Exception
 	{
 		if(alt == null)
 			throw new Exception("Produto a ser Alterado Invalido!");
 		if(!existe(alt.getRa()))
 			throw new Exception("RA invalido para Atualiza��o!");
+		if(!existeMat(alt.getCodigoMateria()))
+			throw new Exception("Codigo Invalido!");
 		try {
 			String sql;
-			sql = "UPDATE FROM FEZ SET CODIGOMATERIAS = ?, NOTA = ?, FREQUENCIA = ? WHERE RA = ?";
+			sql = "UPDATE FEZ SET NOTA = ?, FREQUENCIA = ? WHERE RA = ? and CODIGOMATERIAS = ?";
 			BDSQLServer.COMANDO.prepareStatement(sql);
+			BDSQLServer.COMANDO.setFloat(1,alt.getNota());
+			BDSQLServer.COMANDO.setInt(2,alt.getFrequencia());
+			BDSQLServer.COMANDO.setInt(3,alt.getRa());
+			BDSQLServer.COMANDO.setInt(4,alt.getCodigoMateria());
 			BDSQLServer.COMANDO.executeUpdate();
 			BDSQLServer.COMANDO.commit();
 		}catch(SQLException erro)
