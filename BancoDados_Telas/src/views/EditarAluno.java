@@ -26,9 +26,9 @@ public class EditarAluno {
 
 	protected static final String frame = null;
 	protected JFrame frmAltAluno;
-	private int ra;
-	private String nome;
-	private String email;
+	private static int ra;
+	private static String nome;
+	private static String email;
 	private JPanel panel_1;
 	private JPanel panel_2;
 	private JLabel lblNewLabel_1;
@@ -41,7 +41,7 @@ public class EditarAluno {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					EditarAluno window = new EditarAluno();
+					EditarAluno window = new EditarAluno(ra,nome,email);
 					window.frmAltAluno.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -53,18 +53,18 @@ public class EditarAluno {
 	/**
 	 * Create the application.
 	 */
-	public EditarAluno() {
+	public EditarAluno(int ra, String nome , String email) {
+		this.ra = ra;
+		this.nome = nome;
+		this.email = email;
+		
 		initialize();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	public EditarAluno(int ra, String nome, String email) {
-		this.ra = ra;
-		this.nome = nome;
-		this.email = email;
-	}
+
 	private void initialize() {
 		frmAltAluno = new JFrame();
 		frmAltAluno.setTitle("Alterar Aluno");
@@ -83,6 +83,7 @@ public class EditarAluno {
 		txtNomeAlt = new JTextField();
 		txtNomeAlt.setColumns(10);
 		panel.add(txtNomeAlt);
+		txtNomeAlt.setText(nome);
 		GroupLayout groupLayout = new GroupLayout(frmAltAluno.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -103,6 +104,7 @@ public class EditarAluno {
 						.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 126, GroupLayout.PREFERRED_SIZE))
 					.addContainerGap())
 		);
+		
 		
 		JButton btnAlterar = new JButton("Alterar");
 		btnAlterar.addActionListener(new ActionListener() {
@@ -134,5 +136,6 @@ public class EditarAluno {
 		panel_1.add(txtEmailAlt);
 		txtEmailAlt.setColumns(10);
 		frmAltAluno.getContentPane().setLayout(groupLayout);
+		txtEmailAlt.setText(email);
 	}
 }

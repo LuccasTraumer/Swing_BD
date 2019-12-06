@@ -25,6 +25,19 @@ public final class Materias {
 		}
 	}
 	
+	public static MeuResultSet mostrarMaterias() throws Exception
+	{
+		MeuResultSet resultado;
+		try {
+			String sql = "select * from MATERIAS";
+			BDSQLServer.COMANDO.prepareStatement(sql);
+			resultado = (MeuResultSet) BDSQLServer.COMANDO.executeQuery();
+		}catch(SQLException err) {
+			throw new Exception("Erro ao Visualizar!");
+		}
+		
+		return resultado;
+	}
 	public static boolean existe(int codigo) throws Exception
 	{
             
@@ -73,6 +86,7 @@ public final class Materias {
 			String sql;
 			sql = "DELETE FROM MATERIAS WHERE CODIGOMATERIAS = ?";
 			BDSQLServer.COMANDO.prepareStatement(sql);
+			BDSQLServer.COMANDO.setInt(1,codigo);
 			BDSQLServer.COMANDO.executeUpdate();
 			BDSQLServer.COMANDO.commit();
 		}catch(SQLException erro)

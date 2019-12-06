@@ -47,7 +47,7 @@ public class JanelaPrincipal {
 	private Materia modeloMateria;
 	private Fez modeloFez;
 	private JTable table;
-	private JTable table_1;
+	private JTable table_M;
 	/**
 	 * Launch the application.
 	 */
@@ -117,6 +117,7 @@ public class JanelaPrincipal {
 		panel.add(txtNome);
 		txtNome.setColumns(10);
 		
+		
 		JLabel lblEmail = new JLabel("  Email:");
 		panel.add(lblEmail);
 		
@@ -124,8 +125,8 @@ public class JanelaPrincipal {
 		panel.add(txtEmail);
 		txtEmail.setColumns(10);
 		
-		JButton btnLeitura = new JButton("Leitura");
-		btnLeitura.addActionListener(new ActionListener() {
+		JButton btnLeitura_A = new JButton("Leitura");
+		btnLeitura_A.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 				MeuResultSet resultado;
@@ -142,13 +143,13 @@ public class JanelaPrincipal {
 				}
 			}
 		});
-		panel.add(btnLeitura);
+		panel.add(btnLeitura_A);
 		
-		JButton btnIncluir = new JButton("Incluir");
-		panel.add(btnIncluir);
+		JButton btnIncluir_A = new JButton("Incluir");
+		panel.add(btnIncluir_A);
 		
-		JButton btnAlterar = new JButton("Alterar");
-		btnAlterar.addActionListener(new ActionListener() {
+		JButton btnAlterar_A = new JButton("Alterar");
+		btnAlterar_A.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					int linhaSelc = table.getSelectedRow();
@@ -159,6 +160,7 @@ public class JanelaPrincipal {
 						String email = (String)table.getModel().getValueAt(linhaSelc, 2);
 						EditarAluno edit = new EditarAluno(ra,nome,email);
 						edit.frmAltAluno.setVisible(true);
+						btnLeitura_A.doClick();
 					}else {
 						Object[] options = {"Confirmar"};
 						JOptionPane.showOptionDialog(null,"É necessario seleconar um Aluno para Excluir","Selecionar Aluno",  JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR,null, options, options[0]);
@@ -168,10 +170,10 @@ public class JanelaPrincipal {
 				}catch(Exception err) {}
 			}
 		});
-		panel.add(btnAlterar);
+		panel.add(btnAlterar_A);
 		
-		JButton btnExcluir = new JButton("Excluir");
-		btnExcluir.addActionListener(new ActionListener() {
+		JButton btnExcluir_A = new JButton("Excluir");
+		btnExcluir_A.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					int linhaSelc = table.getSelectedRow();
@@ -180,7 +182,7 @@ public class JanelaPrincipal {
 						if(resp == JOptionPane.YES_NO_OPTION) {
 							int ra = Integer.parseInt((String)table.getModel().getValueAt(linhaSelc,0));
 							Alunos.excluir(ra);
-							btnLeitura.doClick();
+							btnLeitura_A.doClick();
 						}
 					}else {
 						Object[] options = {"Confirmar"};
@@ -191,8 +193,8 @@ public class JanelaPrincipal {
 				
 			}
 		});
-		panel.add(btnExcluir);
-		btnIncluir.addActionListener(new ActionListener() {
+		panel.add(btnExcluir_A);
+		btnIncluir_A.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int ra = 0;
 				if(txtRa.getText().length() < 5) {
@@ -214,7 +216,7 @@ public class JanelaPrincipal {
 					try {
 					modeloAluno = new Aluno(ra,txtNome.getText(),txtEmail.getText());
 					Alunos.incluir(modeloAluno);
-					btnLeitura.doClick();
+					btnLeitura_A.doClick();
 					Object[] options = {"Confirmar"};
 					JOptionPane.showOptionDialog(null,"Aluno Incluido","Sucesso",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE,null, options, options[0]);
 					}
@@ -239,8 +241,8 @@ public class JanelaPrincipal {
 		Exibir.add(panel_3);
 		panel_3.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		table_1 = new JTable();
-		panel_3.add(table_1);
+		table_M = new JTable();
+		panel_3.add(table_M);
 		
 		JPanel panel_2 = new JPanel();
 		Exibir.add(panel_2);
@@ -260,17 +262,86 @@ public class JanelaPrincipal {
 		panel_2.add(txtNomeMateria);
 		txtNomeMateria.setColumns(10);
 		
-		JButton btnLeitura_1 = new JButton("Leitura");
-		panel_2.add(btnLeitura_1);
+		JButton btnLeitura_M = new JButton("Leitura");
+		btnLeitura_M.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					MeuResultSet resultado;
+					String[] colunas = {"Codigo Materia","Nome Materia"};
+					resultado = Materias.mostrarMaterias();
+					DefaultTableModel tabela = new DefaultTableModel(colunas,0);
+					
+					while(resultado.next()) {
+						tabela.addRow(new String[] {""+ resultado.getInt(1),  resultado.getString(2)});
+					}
+					table_M.setModel(tabela);
+					}catch(Exception err) {
+						err.printStackTrace();
+					}
+			}
+		});
 		
-		JButton btnAlterar_1 = new JButton("Alterar");
-		panel_2.add(btnAlterar_1);
+		panel_2.add(btnLeitura_M);
 		
-		JButton btnExcluir_1 = new JButton("Excluir");
-		panel_2.add(btnExcluir_1);
+		JButton btnIncluir_M = new JButton("Incluir");
+		btnIncluir_M.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int codMateria = 0;
+				if(txtCodMateria.getText().length() < 0) {
+					Object[] options = {"Confirmar"};
+					JOptionPane.showOptionDialog(null,"Codigo Invalido invalido","Codigo Materia",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE,null, options, options[0]);
+				}else {
+					codMateria = Integer.parseInt(txtCodMateria.getText());
+				}
+				if(txtNomeMateria.getText().length() < 1)
+				{
+					Object[] options = {"Confirmar"};
+					JOptionPane.showOptionDialog(null,"Nome invalido","Nome",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE,null, options, options[0]);
+				}
+				else {
+					try {
+					modeloMateria = new Materia(codMateria,txtNomeMateria.getText());
+					Materias.incluir(modeloMateria);
+					btnLeitura_M.doClick();
+					Object[] options = {"Confirmar"};
+					JOptionPane.showOptionDialog(null,"Materia Incluida","Sucesso",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE,null, options, options[0]);
+					}
+					catch(Exception err) {
+						Object[] options = {"Confirmar"};
+						JOptionPane.showOptionDialog(null,err.getMessage(),"Exception",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE,null, options, options[0]);err.getMessage();
+					}
+				}
+			}
+		});
+		panel_2.add(btnIncluir_M);
 		
-		JButton btnIncluir_1 = new JButton("Incluir");
-		panel_2.add(btnIncluir_1);
+		JButton btnAlterar_M = new JButton("Alterar");
+		panel_2.add(btnAlterar_M);
+		
+		JButton btnExcluir_M = new JButton("Excluir");
+		btnExcluir_M.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					int linhaSelc = table_M.getSelectedRow();
+					if(linhaSelc != -1) {
+						int resp = JOptionPane.showConfirmDialog(null,"Deseja Realmente excluir ?","Exluir?",JOptionPane.YES_NO_OPTION);
+						if(resp == JOptionPane.YES_NO_OPTION) {
+							int cod = Integer.parseInt((String)table_M.getModel().getValueAt(linhaSelc,0));
+							Materias.excluir(cod);
+							btnLeitura_M.doClick();
+						}
+					}else {
+						Object[] options = {"Confirmar"};
+						JOptionPane.showOptionDialog(null,"É necessario seleconar uma Materia para Excluir","Selecionar Materia",  JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR,null, options, options[0]);
+					}
+					
+				}catch(Exception erro) {
+					Object[] options = {"Confirmar"};
+					JOptionPane.showOptionDialog(null,erro.getMessage(),"Exception",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE,null, options, options[0]);erro.getMessage();
+				}
+			}
+		});
+		panel_2.add(btnExcluir_M);
 		
 		JPanel panelFez = new JPanel();
 		tabbedPane.addTab("Fez", null, panelFez, null);
