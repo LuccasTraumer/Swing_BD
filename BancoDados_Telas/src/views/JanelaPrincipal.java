@@ -84,7 +84,7 @@ public class JanelaPrincipal {
 	private void initialize() {
 		frmPrincipal = new JFrame();
 		frmPrincipal.setTitle("Principal");
-		frmPrincipal.setBounds(100, 100, 1089, 386);
+		frmPrincipal.setBounds(100, 100, 1089, 414);
 		frmPrincipal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmPrincipal.getContentPane().setLayout(new BoxLayout(frmPrincipal.getContentPane(), BoxLayout.X_AXIS));
 		
@@ -203,21 +203,61 @@ public class JanelaPrincipal {
 			}
 		});
 		panel.add(btnExcluir_A);
+		
+		JButton btnZeroFreq = new JButton("Alunos com 0% de Frequencia");
+		btnZeroFreq.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					MeuResultSet resultado;
+					String[] colunas = {"Nome","Frequencia"};
+					resultado = Alunos.frequenciaZero();
+					DefaultTableModel tabela = new DefaultTableModel(colunas,0);
+					
+					while(resultado.next()) {
+						tabela.addRow(new String[] {resultado.getString(1),  ""+resultado.getInt(2)});
+					}
+					table.setModel(tabela);
+					}catch(Exception err) {
+						err.printStackTrace();
+					}
+			}
+		});
+		panel.add(btnZeroFreq);
+		
+		JButton btnAlunosCrescente = new JButton("nome dos alunos ordenados crescente pela m\u00E9dia de suas mat\u00E9rias");
+		btnAlunosCrescente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					MeuResultSet resultado;
+					String[] colunas = {"Nome Aluno","Nome Materia","Media"};
+					resultado = Alunos.alunosPorMateriaMedia();
+					DefaultTableModel tabela = new DefaultTableModel(colunas,0);
+					
+					while(resultado.next()) {
+						tabela.addRow(new String[] {resultado.getString(1),resultado.getString(2),""+resultado.getFloat(3)});
+					}
+					table.setModel(tabela);
+				}catch(Exception err) {
+					err.printStackTrace();
+				}
+			}
+		});
+		panel.add(btnAlunosCrescente);
 		btnIncluir_A.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int ra = 0;
-				if(txtRa.getText().length() < 5) {
+				if(txtRa.getText().length() < 5 || txtRa == null || txtRa.getText().equals("")) {
 					Object[] options = {"Confirmar"};
 					JOptionPane.showOptionDialog(null,"Ra invalido","RA",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE,null, options, options[0]);
 				}else {
 					ra = Integer.parseInt(txtRa.getText());
 				}
-				if(txtNome.getText().length() < 1)
+				if(txtNome.getText().length() < 1 || txtNome == null || txtNome.getText().equals(""))
 				{
 					Object[] options = {"Confirmar"};
 					JOptionPane.showOptionDialog(null,"Nome invalido","Nome",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE,null, options, options[0]);
 				}
-				if(txtEmail.getText().length() < 1)
+				if(txtEmail.getText().length() < 1 || txtEmail == null || txtEmail.getText().equals(""))
 				{
 					Object[] options = {"Confirmar"};
 					JOptionPane.showOptionDialog(null,"Email invalido","Email",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE,null, options, options[0]);
@@ -300,13 +340,13 @@ public class JanelaPrincipal {
 		btnIncluir_M.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int codMateria = 0;
-				if(txtCodMateria.getText().length() < 0) {
+				if(txtCodMateria.getText().length() < 0 || txtCodMateria == null || txtCodMateria.getText().equals("")) {
 					Object[] options = {"Confirmar"};
 					JOptionPane.showOptionDialog(null,"Codigo Invalido invalido","Codigo Materia",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE,null, options, options[0]);
 				}else {
 					codMateria = Integer.parseInt(txtCodMateria.getText());
 				}
-				if(txtNomeMateria.getText().length() < 1)
+				if(txtNomeMateria.getText().length() < 1 || txtNomeMateria == null || txtNomeMateria.getText().equals(""))
 				{
 					Object[] options = {"Confirmar"};
 					JOptionPane.showOptionDialog(null,"Nome invalido","Nome",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE,null, options, options[0]);
@@ -376,13 +416,53 @@ public class JanelaPrincipal {
 		});
 		panel_2.add(btnExcluir_M);
 		
+		JButton btnMatSemRep = new JButton("nome das materias sem reprovacao materias");
+		btnMatSemRep.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					MeuResultSet resultado;
+					String[] colunas = {"NomeMateria"};
+					resultado = Materias.materiasSemReprovacao();
+					DefaultTableModel tabela = new DefaultTableModel(colunas,0);
+					
+					while(resultado.next()) {
+						tabela.addRow(new String[] {resultado.getString(1)});
+					}
+					table_M.setModel(tabela);
+					}catch(Exception err) {
+						err.printStackTrace();
+					}
+			}
+		});
+		panel_2.add(btnMatSemRep);
+		
+		JButton btnCrescenteMed = new JButton("nome das materias ordenado de forma crescente pela media dos alunos");
+		btnCrescenteMed.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					MeuResultSet resultado;
+					String[] colunas = {"NomeMateria","Media Alunos"};
+					resultado = Materias.mediaCrescenteAlunos();
+					DefaultTableModel tabela = new DefaultTableModel(colunas,0);
+					
+					while(resultado.next()) {
+						tabela.addRow(new String[] {""+ resultado.getString(1),  ""+resultado.getFloat(2)});
+					}
+					table_M.setModel(tabela);
+					}catch(Exception err) {
+						err.printStackTrace();
+					}
+			}
+		});
+		panel_2.add(btnCrescenteMed);
+		
 		JPanel panelFez = new JPanel();
 		tabbedPane.addTab("Fez", null, panelFez, null);
 		panelFez.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		JPanel panel_1 = new JPanel();
 		panelFez.add(panel_1);
-		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.X_AXIS));
+		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.Y_AXIS));
 		
 		table_F = new JTable();
 		panel_1.add(table_F);
@@ -454,27 +534,27 @@ public class JanelaPrincipal {
 				int codM = 0;
 				float nota = 0.0f;
 				int freq = 0;
-				if(txtRa_F.getText().length() < 5) {
+				if(txtRa_F.getText().length() < 5 || txtRa_F == null || txtRa_F.getText().equals("")) {
 					Object[] options = {"Confirmar"};
 					JOptionPane.showOptionDialog(null,"Ra invalido","RA",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE,null, options, options[0]);
 				}else {
 					ra = Integer.parseInt(txtRa_F.getText());
 				}
-				if(txtCodMat_F.getText().length() < 1)
+				if(txtCodMat_F.getText().length() < 1 || txtCodMat_F == null|| txtCodMat_F.getText().equals(""))
 				{
 					Object[] options = {"Confirmar"};
 					JOptionPane.showOptionDialog(null,"Codigo invalido","Cod Mat",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE,null, options, options[0]);
 				}else {
 					codM = Integer.parseInt(txtCodMat_F.getText());
 				}
-				if(txtNota_F.getText().length() < 1)
+				if(txtNota_F.getText().length() < 1 || txtNota_F == null || txtNota_F.getText().equals(""))
 				{
 					Object[] options = {"Confirmar"};
 					JOptionPane.showOptionDialog(null,"Nota invalida","Nota",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE,null, options, options[0]);
 				}else {
 					nota = Float.parseFloat(txtNota_F.getText());
 				}
-				if(txtFrequencia_F.getText().length() < 1)
+				if(txtFrequencia_F.getText().length() < 1 || txtFrequencia_F == null || txtFrequencia_F.getText().equals(""))
 				{
 					Object[] options = {"Confirmar"};
 					JOptionPane.showOptionDialog(null,"Frequencia invalida","Frequencia",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE,null, options, options[0]);
@@ -532,7 +612,8 @@ public class JanelaPrincipal {
 						int resp = JOptionPane.showConfirmDialog(null,"Deseja Realmente excluir ?","Exluir?",JOptionPane.YES_NO_OPTION);
 						if(resp == JOptionPane.YES_NO_OPTION) {
 							int ra = Integer.parseInt((String)table_F.getModel().getValueAt(linhaSelc,0));
-							Fezs.excluir(ra);
+							int codMat = Integer.parseInt((String)table_F.getModel().getValueAt(linhaSelc,1));
+							Fezs.excluir(ra,codMat);
 							btnLeitura_F.doClick();
 						}
 					}else {

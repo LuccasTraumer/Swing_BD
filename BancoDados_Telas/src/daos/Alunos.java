@@ -223,7 +223,19 @@ public final class Alunos {
             return ret;
         }
         
-        public static String alunosFrequencia() throws Exception
+        public static MeuResultSet frequenciaZero() throws Exception{
+        	MeuResultSet resultado;
+        	try {
+        		String sql = "frequenciaAlunos_sp";
+        		BDSQLServer.COMANDO.prepareStatement(sql);
+        		resultado = (MeuResultSet)BDSQLServer.COMANDO.executeQuery();
+        	}catch(SQLException err) {
+        		throw new Exception("Erro ao Visualizar!");
+        	}
+        	return resultado;
+        	
+        }
+        public static String alunosFrequenciaZero() throws Exception
         {
             String ret= "";
         
@@ -257,6 +269,19 @@ public final class Alunos {
             return ret;
         }
         
+        public static MeuResultSet alunosPorMateriaMedia() throws Exception{
+        	MeuResultSet resultado;
+            try{
+                String sql = "mediaAlunosPorMateria_sp ";
+                BDSQLServer.COMANDO.prepareStatement(sql);
+                resultado = (MeuResultSet)BDSQLServer.COMANDO.executeQuery();
+                
+            }catch(SQLException erro)
+            {
+                throw new Exception("Erro ao Visualizar!");
+            }
+        	return resultado;
+        }
         public static String alunosAcimaDe(float nota) throws Exception
         {
             if(nota < 0 || nota > 10)

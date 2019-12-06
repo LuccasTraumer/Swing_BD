@@ -151,35 +151,33 @@ public final class Materias {
             }
             return ret;
         }
-        public static String materiasSemReprovacao() throws Exception
+        public static MeuResultSet materiasSemReprovacao() throws Exception
         {
-            String ret = "";
+            MeuResultSet resultado;
             try{
                 String sql = "materiasSemReprovacao_sp";
                 BDSQLServer.COMANDO.prepareStatement(sql);
                 
-                MeuResultSet resultado = (MeuResultSet) BDSQLServer.COMANDO.executeQuery();
-                while(resultado.next())
-                    ret += "Nome Materia: "+ resultado.getString("nome") + ", Media: " + resultado.getFloat("Media")+"\n";
+                resultado = (MeuResultSet) BDSQLServer.COMANDO.executeQuery();
+                
             }catch(SQLException erro)
             {
                 throw new Exception("Não Possivel Visualizar!");
             }
-            return ret;
+            return resultado;
         }
-        public static String mediaCrescenteAlunos() throws Exception
+        public static MeuResultSet mediaCrescenteAlunos() throws Exception
         {
-            String ret = "";
+            MeuResultSet resultado;
             try{
                 String sql = "mediaCrescenteAlunos_sp";
                 BDSQLServer.COMANDO.prepareStatement(sql);
-                MeuResultSet resultado = (MeuResultSet) BDSQLServer.COMANDO.executeQuery();
-                while(resultado.next())
-                    ret += "Nome Materia: "+ resultado.getString("nome") + ", Media Alunos: "+ resultado.getInt("MediaAlunos")+"\n";
+                resultado = (MeuResultSet) BDSQLServer.COMANDO.executeQuery();
+                
             }catch(SQLException erro){
             throw new Exception("Não Possivel Visualizar!");
             }
-            return ret;
+            return resultado;
         }
                 
 }

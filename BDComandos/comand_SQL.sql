@@ -25,23 +25,23 @@ insert into FEZ values(19372,2,8.0,75)
 -- RELATORIO
 
 --alunos que tiveram 0% de frequencia ALUNOS
-create proc frequenciaAlunos_sp
+alter proc frequenciaAlunos_sp
 as
 select a.nome,avg(f.frequencia) as 'Frequencia'from 
 ALUNOS a, FEZ f
 where
-a.RA = f.RA
+a.RA = f.RA and
+f.frequencia = 0
 GROUP BY a.NOME
-order by avg(f.frequencia) asc
+
 --nome das materias sem reprovacao materias MATERIAS
 alter proc materiasSemReprovacao_sp
 as
-select m.nome, avg(f.NOTA) as 'Media'from MATERIAS m 
+select m.nome from MATERIAS m 
 inner join FEZ f on m.codigoMaterias = f.codigoMaterias
 where 
 f.NOTA > 5
-group by m.NOME
-order by avg(f.NOTA) asc
+
 select * from MATERIAS
 --nome das materias ordenado de forma crescente pela media dos alunos MATERIAS
 

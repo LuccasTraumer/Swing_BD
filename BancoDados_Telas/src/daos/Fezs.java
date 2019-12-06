@@ -60,7 +60,7 @@ public final class Fezs {
 		}
 	}
 	
-	public static void excluir(int ra) throws Exception
+	public static void excluirAluno(int ra) throws Exception
 	{
             
 		if(!existe(ra))
@@ -77,6 +77,21 @@ public final class Fezs {
 		}catch(SQLException erro)
 		{
 			throw new Exception("Erro ao Excluir Dado!");
+		}
+	}
+	public static void excluir(int ra,int codMat) throws Exception{
+		if(ra < 9999 || codMat < 0)
+			throw new Exception("RA ou Codigo Invalido!");
+		try {
+			String sql = "delete from FEZ where RA = ? and codigoMaterias = ?";
+			BDSQLServer.COMANDO.prepareStatement(sql);
+			BDSQLServer.COMANDO.setInt(1,ra);
+			BDSQLServer.COMANDO.setInt(2,codMat);
+			
+			BDSQLServer.COMANDO.executeQuery();
+			BDSQLServer.COMANDO.commit();
+		}catch(SQLException err) {
+			throw new Exception("Erro ao Deletar");
 		}
 	}
 	public static boolean existeMat(int cod) throws Exception{
