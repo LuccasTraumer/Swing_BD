@@ -76,9 +76,22 @@ public class EditarMaterias {
 		panel.add(txtNomeAlt_M);
 		txtNomeAlt_M.setColumns(10);
 		txtNomeAlt_M.setText(nome);
-		
+		/*
 		GroupLayout groupLayout = new GroupLayout(frmAltMat.getContentPane());
-		
+		groupLayout.setHorizontalGroup(
+				groupLayout.createParallelGroup(Alignment.LEADING)
+					.addGroup(groupLayout.createSequentialGroup()
+						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 157, GroupLayout.PREFERRED_SIZE)
+						.addGap(2))
+						);
+		groupLayout.setVerticalGroup(
+				groupLayout.createParallelGroup(Alignment.LEADING)
+					.addGroup(groupLayout.createSequentialGroup()
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 126, GroupLayout.PREFERRED_SIZE)
+								)
+						)
+		);*/
 		
 		JButton btnLimpar_M = new JButton("Limpar");
 		btnLimpar_M.addActionListener(new ActionListener() {

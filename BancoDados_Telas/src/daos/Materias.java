@@ -68,7 +68,8 @@ public final class Materias {
 			String sql;
 			sql = "UPDATE MATERIAS SET NOME = ? WHERE CODIGOMATERIAS = ?";
 			BDSQLServer.COMANDO.prepareStatement(sql);
-			BDSQLServer.COMANDO.setInt(1,alt.getCodigoMateria());
+			BDSQLServer.COMANDO.setString(1,alt.getNomeMateria());
+			BDSQLServer.COMANDO.setInt(2,alt.getCodigoMateria());
 			BDSQLServer.COMANDO.executeUpdate();
 			BDSQLServer.COMANDO.commit();
 		}catch(SQLException erro)

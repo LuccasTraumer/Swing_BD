@@ -319,15 +319,15 @@ public class JanelaPrincipal {
 		btnAlterar_M.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					int linhaSelc = table.getSelectedRow();
+					int linhaSelc = table_M.getSelectedRow();
 					
 					if(linhaSelc != -1) {
-						int cod = Integer.parseInt((String)table.getModel().getValueAt(linhaSelc, 0));
-						String nome = (String)table.getModel().getValueAt(linhaSelc, 1);
+						int cod = Integer.parseInt((String)table_M.getModel().getValueAt(linhaSelc, 0));
+						String nome = (String)table_M.getModel().getValueAt(linhaSelc, 1);
 						
 						EditarMaterias edit = new EditarMaterias(cod,nome);
 						edit.frmAltMat.setVisible(true);
-						//btnLeitura_M.doClick();
+						btnLeitura_M.doClick();
 					}else {
 						Object[] options = {"Confirmar"};
 						JOptionPane.showOptionDialog(null,"É necessario seleconar uma Materia para Excluir","Selecionar Materia",  JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR,null, options, options[0]);
