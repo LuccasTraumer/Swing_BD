@@ -5,7 +5,7 @@ ARQUIVOS COM OS COMANDOS NECESSARIOS DO PROF. SERGIO DO TRABALHO.
 
 ---------------------------------- STORED PROCEDURE
 -- 1Stored PROCEDURES 
-create procedure exclusaoAluno_sp -- SENDO UTILIZADO CLASSE ALUNODAO
+create procedure exclusaoAluno_sp 
 @ra int = null
 as 
 if(@ra is null)
@@ -15,7 +15,8 @@ begin
 	delete from ALUNOS where RA = @ra
 
 end
-select * from fez
+
+select * from ALUNOS
 
 -- 2Stored PROCEDURES
 
@@ -29,7 +30,7 @@ begin
 	delete from MATERIAS where NOME = @nome
 end
 
-exlusaoMateria_sp @nome = 'TP2'
+exlusaoMateria_sp @nome = 'Desenvolvimento para Internet 2'
 insert into MATERIAS values(1,'TP2')
 
 select * from MATERIAS
@@ -81,7 +82,7 @@ inner join MATERIAS m on m.codigoMaterias = f.codigoMaterias
 group by a.NOME,m.NOME
 order by avg(f.NOTA) asc
 -------------------------------------TRIGGER
--- 1 criando trigger ** CASO INSIRA ALGUM ALUNO A TRIGGER É DISPARADA == FEITO
+-- 1 criando trigger ** 
 
 create trigger inseriuAluno_tg on ALUNOS -- SENDO ULTILIZADO 
 for INSERT
@@ -129,10 +130,10 @@ as
 select * from FEZ order by frequencia asc
 
 -- 2 Cursor ** ALUNOS ACIMA DE UMA NOTA
-create proc notaAcima_sp  -- NÃO CONSEGUI IMPLEMENTAR POIS NÃO SEI MANUSEAR CURSOR AINDA
+alter proc notaAcima_sp  
 @nota float = null
 as
-if(@nota < 0 or @nota > 11)
+if(@nota < 0 or @nota > 11 or @nota is null)
 print'Nota Invalida!'
 else
 	begin
@@ -154,11 +155,36 @@ else
 	deallocate notaAci
 end
 
-notaAcima_sp 4
+notaAcima_sp 3
 
 -- 3 cursor
+alter proc frequenciaAcima_sp
+@freq int  = null
+as
+if(@freq < 0 or @freq > 100 or @freq is null)
+print 'Frequencia Invalida!'
+else
+begin
+	declare @nomeAluno varchar(100) 
+	declare @frequencia int 
+	declare freqAcima scroll cursor for
+	select a.nome, f.frequencia from Alunos a inner join FEZ f on a.RA = f.RA
+	where 
+	f.frequencia > @freq
+	open freqAcima
+	fetch next from freqAcima into @nomeAluno,@frequencia
+	while @@FETCH_STATUS = 0
+	begin
+		print 'Aluno: '+ @nomeAluno + ' Frequencia: '+ cast(@frequencia as varchar(10))
+		fetch next from freqAcima into @nomeAluno,@frequencia
+	end
+	close freqAcima
+	deallocate freqAcima
 
+end
 
+select * from fez
+frequenciaAcima_sp 10
 -- 4 cursor
 
 --------------------------------- TAB TEMP
@@ -246,7 +272,8 @@ alter table FEZ
 add constraint df_NOTA
 default 0 for NOTA
 
-
+select * from FEZ
+insert into FEZ(RA,CODIGOMATERIAS) values(19372,1)
 select * from FEZ
 -- 3 default
 

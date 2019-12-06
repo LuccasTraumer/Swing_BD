@@ -24,13 +24,28 @@ public final class Alunos {
 			BDSQLServer.COMANDO.commit();
 		}catch(SQLException erro)
 		{
-			throw new Exception("Erro ao Incluir novo Aluno!");
+			throw new Exception("Erro ao Incluir novo Aluno!llll");
 		}
+	}
+	
+	public static MeuResultSet mostrarAlunos() throws Exception
+	{
+		MeuResultSet resultado;
+		try {
+			String sql = "select * from Alunos";
+			BDSQLServer.COMANDO.prepareStatement(sql);
+			resultado = (MeuResultSet) BDSQLServer.COMANDO.executeQuery();
+		}catch(SQLException err)
+		{
+			throw new Exception("Não Possivel exibir!");
+			
+		}
+		return resultado;
 	}
 	public static boolean existe(int ra) throws Exception
 	{
-		if(ra <= 0)
-			throw new Exception("RA Invalido para verificaï¿½ï¿½o!");
+		//if(ra <= 0)
+		//	throw new Exception("RA Invalido para verificaï¿½ï¿½o!");
 		boolean retorno = false;
 		try {
 			String sql;
@@ -83,6 +98,38 @@ public final class Alunos {
 			throw new Exception("Nï¿½o foi Possivel Exclui o dado!");
 		}
 	}
+		public static MeuResultSet notaAcimaDe(float nota) throws Exception 
+		{
+			if(nota < 0 || nota > 10)
+				throw new Exception("Nota Invalida!");
+			MeuResultSet resultado;
+			try {
+				String sql = "notaAcima_sp ?";
+				BDSQLServer.COMANDO.prepareStatement(sql);
+				BDSQLServer.COMANDO.setFloat(1,nota);
+				resultado = (MeuResultSet) BDSQLServer.COMANDO.executeQuery();
+			}catch(SQLException err) {
+				throw new Exception("Erro ao Pegar dados");
+			}
+			return resultado;
+		}
+		public static MeuResultSet frequenciaAcima(int frequencia) throws Exception
+		{
+			if(frequencia < 0 || frequencia > 100)
+				throw new Exception("Frequencia Invalida!");
+			MeuResultSet resultado;
+			try {
+				String sql = "frequenciaAcima_sp ?";
+				BDSQLServer.COMANDO.prepareStatement(sql);
+				BDSQLServer.COMANDO.setInt(1,frequencia);
+				resultado = (MeuResultSet) BDSQLServer.COMANDO.executeQuery();
+			}catch(SQLException err)
+			{
+				throw new Exception("Erro ao Visualizar!");
+			}
+			
+			return resultado;
+		}
         public static void excAluno(int ra) throws Exception // Stored Procedure
         {
             if(ra <= 0)
