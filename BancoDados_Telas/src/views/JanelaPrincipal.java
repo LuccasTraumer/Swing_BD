@@ -34,6 +34,8 @@ import bd.*;
 import bd.core.*;
 import views.EditarAluno;
 import javax.swing.BoxLayout;
+import java.awt.Insets;
+import java.awt.FlowLayout;
 public class JanelaPrincipal {
 
 	private JFrame frmPrincipal;
@@ -48,6 +50,11 @@ public class JanelaPrincipal {
 	private Fez modeloFez;
 	private JTable table;
 	private JTable table_M;
+	private JTextField txtCodMat_F;
+	private JTextField txtFrequencia_F;
+	private JTextField txtNota_F;
+	private JTextField txtRa_F;
+	private JTable table_F;
 	/**
 	 * Launch the application.
 	 */
@@ -77,7 +84,7 @@ public class JanelaPrincipal {
 	private void initialize() {
 		frmPrincipal = new JFrame();
 		frmPrincipal.setTitle("Principal");
-		frmPrincipal.setBounds(100, 100, 746, 397);
+		frmPrincipal.setBounds(100, 100, 917, 444);
 		frmPrincipal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmPrincipal.getContentPane().setLayout(new BoxLayout(frmPrincipal.getContentPane(), BoxLayout.X_AXIS));
 		
@@ -365,6 +372,60 @@ public class JanelaPrincipal {
 		
 		JPanel panelFez = new JPanel();
 		tabbedPane.addTab("Fez", null, panelFez, null);
-		panelFez.setLayout(new GridLayout(1, 0, 0, 0));
+		panelFez.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		JPanel panel_1 = new JPanel();
+		panelFez.add(panel_1);
+		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.X_AXIS));
+		
+		table_F = new JTable();
+		panel_1.add(table_F);
+		
+		JPanel panel_4 = new JPanel();
+		panelFez.add(panel_4);
+		panel_4.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		JLabel label = new JLabel("Codigo Materia");
+		panel_4.add(label);
+		
+		txtCodMat_F = new JTextField();
+		txtCodMat_F.setColumns(10);
+		panel_4.add(txtCodMat_F);
+		
+		JLabel label_5 = new JLabel("RA:");
+		panel_4.add(label_5);
+		
+		txtRa_F = new JTextField();
+		txtRa_F.setColumns(10);
+		panel_4.add(txtRa_F);
+		
+		JLabel label_1 = new JLabel("Frequencia");
+		panel_4.add(label_1);
+		
+		JLabel label_2 = new JLabel("");
+		panel_4.add(label_2);
+		
+		txtFrequencia_F = new JTextField();
+		txtFrequencia_F.setColumns(10);
+		panel_4.add(txtFrequencia_F);
+		
+		JLabel label_3 = new JLabel("Nota:");
+		panel_4.add(label_3);
+		
+		txtNota_F = new JTextField();
+		txtNota_F.setColumns(10);
+		panel_4.add(txtNota_F);
+		
+		JButton button = new JButton("Incluir");
+		panel_4.add(button);
+		
+		JButton button_1 = new JButton("Excluir");
+		panel_4.add(button_1);
+		
+		JButton button_2 = new JButton("Alterar");
+		panel_4.add(button_2);
+		
+		JButton button_3 = new JButton("Leitura");
+		panel_4.add(button_3);
 	}
 }
