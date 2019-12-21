@@ -26,8 +26,8 @@ public class Aluno implements Cloneable{
 	}
 	public void setRa(int ra) throws Exception
 	{
-		//if(ra <= 9999)
-		//	throw new Exception("RA invalido!");
+		if(ra <= 9999)
+			throw new Exception("RA invalido!");
 		
 		this.ra = ra;
 	}

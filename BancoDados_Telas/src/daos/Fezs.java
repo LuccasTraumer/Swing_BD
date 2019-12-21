@@ -41,8 +41,8 @@ public final class Fezs {
 	{
 		if(novo == null)
 			throw new Exception("Novo Objeto Invalido para Inser��o!");
-		/*if(existe(novo.getRa()))
-			throw new Exception("Ja Existe um Aluno com este RA!");*/
+		if(existe(novo.getRa()))
+			throw new Exception("Ja Existe um Aluno com este RA!");
 		try {
 			String sql;
 			sql = "INSERT INTO FEZ VALUES(?,?,?,?)";

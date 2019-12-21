@@ -4,7 +4,7 @@ import bd.*;
 import bd.core.*;
 import java.sql.*;
 import bd.BDSQLServer;
-public final class Alunos {
+public class Alunos {
 	
 	public static void incluir(Aluno novo) throws Exception
 	{
@@ -44,8 +44,8 @@ public final class Alunos {
 	}
 	public static boolean existe(int ra) throws Exception
 	{
-		//if(ra <= 0)
-		//	throw new Exception("RA Invalido para verifica��o!");
+		if(ra <= 0)
+			throw new Exception("RA Invalido para verifica��o!");
 		boolean retorno = false;
 		try {
 			String sql;

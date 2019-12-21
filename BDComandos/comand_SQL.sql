@@ -40,11 +40,12 @@ as
 select m.nome from MATERIAS m 
 inner join FEZ f on m.codigoMaterias = f.codigoMaterias
 where 
-f.NOTA > 5
+f.NOTA > 5 
 
-select * from MATERIAS
+insert into FEZ values(19771,3,3,50)
+select * from FEZ
 --nome das materias ordenado de forma crescente pela media dos alunos MATERIAS
-
+mediaAlunosPorMateria_sp
 create proc mediaCrescenteAlunos_sp
 as
 select m.nome, avg(f.nota)as 'MediaAlunos' from MATERIAS m
